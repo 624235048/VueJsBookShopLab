@@ -32,7 +32,7 @@ export default {
     name: "HeaderStudent",
     methods: {
         SearchStudent() {
-            this.$emit('search:studetId', this.search);
+            this.$emit('search:studentId', this.search);
 
         },
         ClearSearch() {

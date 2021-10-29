@@ -1,6 +1,6 @@
 <template>
 <div>
-    <HeaderStudent v-on:search:studentId="SearchStudents" />
+    <HeaderStudent v-on:search:studentId="SearchStudent" />
     <br /><br />
     <div class="container">
         <div class="row">
@@ -30,7 +30,7 @@ export default {
         return {
             search: "",
             students: [],
-            //studentsearch: []
+            studentsearch: []
         }
     },
     async created() {
@@ -43,7 +43,7 @@ export default {
         
     },
     methods: {
-        SearchStudents: function (searchvalue) {
+        SearchStudent: function (searchvalue) {
             this.search = searchvalue;
         },
         async DeleteStudent(number) {
@@ -59,7 +59,7 @@ export default {
         StudentInSearch: function () {
             if (this.search != "") {
                 return this.students.filter((student) => {
-                    return student.studentId(this.search)
+                    return student.studentId.toString().includes(this.search.toString())
                 });
 
             } else {
