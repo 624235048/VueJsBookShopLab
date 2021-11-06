@@ -101,7 +101,8 @@ export default {
         },
     data() {
         return {
-            book: {}
+            book: {},
+            AccessToken:""
         }
     },
     methods: {
@@ -116,25 +117,36 @@ export default {
                     this.book.thumbnailUrl = await bookimage
                     await this.$refs.bookimage.UploadImage();
                 }
-
-                await axios.put(this.$apiUrl + "book/" + this.$route.params.bookid , this.book);
-                await this.$router.push('/'); 
+                
+                await axios.put(this.$apiUrl + "book/" + this.$route.params.bookid,this.book,{ headers: {"Authorization" : `bearer ${this.accessToken}`} });
+                await this.$router.push('/books'); 
             }
 
         },
         Cancel() {
             if (confirm("Do you want to cancel editing this book?")) {
-                this.$router.push('/');
+                this.$router.push('/books');
             }
 
         }
     },
     async mounted() {
 
-        //Code for get book detail from API
-        const response = await axios.get(this.$apiUrl + "book/" + this.$route.params.bookid);
-        this.book = await response.data.data[0];
+    this.accessToken = await localStorage.getItem("accessToken");
 
+    if (await this.accessToken) {
+       try {
+            //Code for get book detail from API
+            const response = await axios.get(this.$apiUrl + "book/" + this.$route.params.bookid,{ headers: {"Authorization" : `bearer ${this.accessToken}`} });
+            this.book = await response.data.data[0];
+      } catch {
+        this.$router.push("/login");
+      }
+    } else {
+      this.$router.push("/login");
+    }
+
+        
     },
 }
 </script>
