@@ -111,13 +111,15 @@ export default {
                 shortDescription: "",
                 author: "",
                 category: ""
-            }
+            },
+            
         }
     },
     methods: {
         async SaveBook() {
         
             if (confirm("Do you want to save this book?")) {
+
 
                 this.book.publishedDate = moment(String(this.book.publishedDate)).format('YYYY-MM-DD');
                 let bookimage = await this.$refs.bookimage.getFileName()
@@ -126,16 +128,17 @@ export default {
                     this.book.thumbnailUrl = await bookimage
                     await this.$refs.bookimage.UploadImage();
                 }
-            
-                await axios.post(this.$apiUrl + "book", this.book);
-                await this.$router.push('/');
+
+                this.accessToken = await localStorage.getItem("accessToken");
+                await axios.post(this.$apiUrl + "book",this.book,{ headers: {"Authorization" : `bearer ${this.accessToken}`} });
+                await this.$router.push('/books');
             }
 
         },
         Cancel() {
             if (confirm("Do you want to cancel adding this book?")) {
 
-                this.$router.push('/');
+                this.$router.push('/books');
 
             }
 

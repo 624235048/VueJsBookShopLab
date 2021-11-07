@@ -41,13 +41,16 @@ export default {
             student: {
                 studentId: "",
                 studentName: ""
-            }
+            },
+            AccessToken:""
         }
     },
     methods: {
         async SaveStudent() {
             
-            await axios.post(this.$apiUrl + "student", this.student);
+            this.accessToken = await localStorage.getItem("accessToken");
+            
+            await axios.post(this.$apiUrl + "student", this.student,{ headers: {"Authorization" : `bearer ${this.accessToken}`} });
             await this.$router.push('/students');
         
 
